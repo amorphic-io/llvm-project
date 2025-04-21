@@ -14,10 +14,4 @@ bazel_dep(name = "rules_cc", version = "0.1.1")
 bazel_dep(name = "rules_python", version = "1.2.0")
 bazel_dep(name = "rules_shell", version = "0.3.0")
 bazel_dep(name = "pybind11_bazel", version = "2.13.6")
-#bazel_dep(name = "nanobind", version = "2.4.0")
-bazel_dep(name = "nanobind_bazel", version = "2.7.0")
-git_override(
-    module_name = "nanobind_bazel",
-    commit = "a90f682ff948f1c2338efe35523036b5cf24a3f1",
-    remote = "https://github.com/nicholasjng/nanobind-bazel",
-)
+bazel_dep(name = "nanobind_bazel", version = "2.6.1")

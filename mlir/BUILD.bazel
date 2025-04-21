@@ -15,6 +15,8 @@ load(
 )
 load(":linalggen.bzl", "genlinalg")
 load(":tblgen.bzl", "gentbl_cc_library", "td_library")
+load("@pybind11_bazel//:build_defs.bzl", "pybind_library")
+load("@nanobind_bazel//:build_defs.bzl", "nanobind_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -950,7 +952,7 @@ filegroup(
     ]),
 )
 
-cc_library(
+pybind_library(
     name = "MLIRBindingsPythonHeaders",
     includes = [
         "include",
@@ -958,12 +960,10 @@ cc_library(
     textual_hdrs = [":MLIRBindingsPythonHeaderFiles"],
     deps = [
         ":CAPIIRHeaders",
-        "@pybind11",
-        "@rules_python//python/cc:current_py_cc_headers",
     ],
 )
 
-cc_library(
+pybind_library(
     name = "MLIRBindingsPythonHeadersAndDeps",
     includes = [
         "include",
@@ -971,12 +971,10 @@ cc_library(
     textual_hdrs = [":MLIRBindingsPythonHeaderFiles"],
     deps = [
         ":CAPIIR",
-        "@pybind11",
-        "@rules_python//python/cc:current_py_cc_headers",
     ],
 )
 
-cc_library(
+nanobind_library(
     name = "MLIRBindingsPythonNanobindHeaders",
     includes = [
         "include",
@@ -984,12 +982,10 @@ cc_library(
     textual_hdrs = [":MLIRBindingsPythonHeaderFiles"],
     deps = [
         ":CAPIIRHeaders",
-        "@nanobind",
-        "@rules_python//python/cc:current_py_cc_headers",
     ],
 )
 
-cc_library(
+nanobind_library(
     name = "MLIRBindingsPythonNanobindHeadersAndDeps",
     includes = [
         "include",
@@ -997,8 +993,6 @@ cc_library(
     textual_hdrs = [":MLIRBindingsPythonHeaderFiles"],
     deps = [
         ":CAPIIR",
-        "@nanobind",
-        "@rules_python//python/cc:current_py_cc_headers",
     ],
 )
 
@@ -1034,7 +1028,7 @@ filegroup(
     ]),
 )
 
-cc_library(
+nanobind_library(
     name = "MLIRBindingsPythonCore",
     srcs = [":MLIRBindingsPythonSourceFiles"],
     copts = PYBIND11_COPTS,
@@ -1043,6 +1037,10 @@ cc_library(
         "lib/Bindings/Python",
     ],
     textual_hdrs = [":MLIRBindingsPythonCoreHeaders"],
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":CAPIAsync",
         ":CAPIDebug",
@@ -1053,12 +1051,10 @@ cc_library(
         ":Support",
         ":config",
         "//llvm:Support",
-        "@nanobind",
-        "@rules_python//python/cc:current_py_cc_headers",
     ],
 )
 
-cc_library(
+nanobind_library(
     name = "MLIRBindingsPythonCoreNoCAPI",
     srcs = [":MLIRBindingsPythonSourceFiles"],
     copts = PYBIND11_COPTS,
@@ -1067,6 +1063,10 @@ cc_library(
         "lib/Bindings/Python",
     ],
     textual_hdrs = [":MLIRBindingsPythonCoreHeaders"],
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":CAPIAsyncHeaders",
         ":CAPIDebugHeaders",
@@ -1076,8 +1076,6 @@ cc_library(
         ":Support",
         ":config",
         "//llvm:Support",
-        "@nanobind",
-        "@rules_python//python/cc:current_py_cc_headers",
     ],
 )
 
@@ -1106,10 +1104,13 @@ cc_binary(
     ],
     linkshared = 1,
     linkstatic = 0,
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":MLIRBindingsPythonCore",
         ":MLIRBindingsPythonHeadersAndDeps",
-        "@nanobind",
     ],
 )
 
@@ -1123,11 +1124,14 @@ cc_binary(
     ],
     linkshared = 1,
     linkstatic = 0,
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":CAPIIR",
         ":CAPILinalg",
         ":MLIRBindingsPythonNanobindHeadersAndDeps",
-        "@nanobind",
     ],
 )
 
@@ -1138,11 +1142,14 @@ cc_binary(
     features = PYBIND11_FEATURES,
     linkshared = 1,
     linkstatic = 0,
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":CAPIIR",
         ":CAPILLVM",
         ":MLIRBindingsPythonNanobindHeadersAndDeps",
-        "@nanobind",
     ],
 )
 
@@ -1153,11 +1160,14 @@ cc_binary(
     features = PYBIND11_FEATURES,
     linkshared = 1,
     linkstatic = 0,
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":CAPIIR",
         ":CAPIQuant",
         ":MLIRBindingsPythonNanobindHeadersAndDeps",
-        "@nanobind",
     ],
 )
 
@@ -1168,11 +1178,14 @@ cc_binary(
     features = PYBIND11_FEATURES,
     linkshared = 1,
     linkstatic = 0,
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":CAPIIR",
         ":CAPISparseTensor",
         ":MLIRBindingsPythonNanobindHeadersAndDeps",
-        "@nanobind",
     ],
 )
 
@@ -1184,11 +1197,13 @@ cc_binary(
     features = PYBIND11_FEATURES,
     linkshared = 1,
     linkstatic = 0,
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":CAPIExecutionEngine",
         ":MLIRBindingsPythonNanobindHeadersAndDeps",
-        "@nanobind",
-        "@rules_python//python/cc:current_py_cc_headers",
     ],
 )
 
@@ -1200,11 +1215,13 @@ cc_binary(
     features = PYBIND11_FEATURES,
     linkshared = 1,
     linkstatic = 0,
+    defines = [
+        "NB_BUILD=1",
+        "NB_SHARED=1",
+    ],
     deps = [
         ":CAPILinalg",
         ":MLIRBindingsPythonNanobindHeadersAndDeps",
-        "@nanobind",
-        "@rules_python//python/cc:current_py_cc_headers",
     ],
 )
 
