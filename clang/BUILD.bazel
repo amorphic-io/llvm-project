@@ -557,6 +557,14 @@ py_binary(
 )
 
 cc_library(
+    name = "internal_basic_hdrs",
+    hdrs = glob([
+        "lib/Basic/*.h",
+    ]),
+    includes = ["lib/Basic"],
+)
+
+cc_library(
     name = "basic",
     srcs = [
         "include/VCSVersion.inc",
@@ -573,7 +581,6 @@ cc_library(
     copts = [
         "-DHAVE_VCS_VERSION_INC",
         "$(STACK_FRAME_UNLIMITED)",
-        "-I$(WORKSPACE_ROOT)/clang/lib/Basic",
     ],
     includes = ["include"],
     textual_hdrs = [
@@ -612,6 +619,7 @@ cc_library(
     ]),
     toolchains = [":workspace_root"],
     deps = [
+        ":internal_basic_hdrs",
         ":basic_arm_cde_gen",
         ":basic_arm_fp16_inc_gen",
         ":basic_arm_mve_aliases_gen",
@@ -805,6 +813,22 @@ gentbl_cc_library(
 workspace_root(name = "workspace_root")
 
 cc_library(
+    name = "internal_ast_hdrs",
+    hdrs = glob([
+        "lib/AST/*.h",
+    ]),
+    includes = ["lib/AST"],
+)
+
+cc_library(
+    name = "internal_ast_bytecode_hdrs",
+    hdrs = glob([
+        "lib/AST/ByteCode/*.h",
+    ]),
+    includes = ["lib/AST/ByteCode"],
+)
+
+cc_library(
     name = "ast",
     srcs = glob([
         "lib/AST/*.cpp",
@@ -818,19 +842,6 @@ cc_library(
     hdrs = glob([
         "include/clang/AST/*.h",
     ]),
-    copts = [
-        # FIXME: This is necessary to allow "file relative" include paths from
-        # non-generated `srcs` to find generated `srcs` above. Bazel should
-        # either make this work automatically by creating a unified tree of
-        # `srcs` or at least provide a `local_includes` that has the path
-        # translation logic of `includes` but is only used locally (similar to
-        # `local_defines` vs. `defines`). Until one of those lands, this is the
-        # least bad approach. Using `includes` is *specifically* problematic for
-        # this library because it contains files that collide easily with system
-        # headers such as `CXXABI.h`.
-        "-I$(GENDIR)/$(WORKSPACE_ROOT)/clang/lib/AST",
-        "-I$(GENDIR)/$(WORKSPACE_ROOT)/clang/lib/AST/ByteCode",
-    ],
     textual_hdrs = [
         "include/clang/AST/AttrImpl.inc",
         "include/clang/AST/AttrNodeTraverse.inc",
@@ -851,6 +862,8 @@ cc_library(
     ]),
     toolchains = [":workspace_root"],
     deps = [
+        ":internal_ast_hdrs",
+        ":internal_ast_bytecode_hdrs",
         ":ast_attr_doc_table_gen",
         ":ast_attr_gen",
         ":ast_bytecode_opcodes_gen",
