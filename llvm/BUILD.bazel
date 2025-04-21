@@ -325,14 +325,8 @@ cc_library(
     deps = [
         ":config",
         ":Demangle",
-        # We unconditionally depend on the custom LLVM zlib wrapper. This will
-        # be an empty library unless zlib is enabled, in which case it will
-        # both provide the necessary dependencies and configuration defines.
-        "@llvm_zlib//:zlib",
-        # We unconditionally depend on the custom LLVM zstd wrapper. This will
-        # be an empty library unless zstd is enabled, in which case it will
-        # both provide the necessary dependencies and configuration defines.
-        "@llvm_zstd//:zstd",
+        # "@llvm_zlib//:zlib",
+        # "@llvm_zstd//:zstd",
     ],
 )
 
@@ -4017,7 +4011,7 @@ cc_library(
 # Flag documentation: https://bazel.build/extending/config
 string_flag(
     name = "pfm",
-    build_setting_default = "external",
+    build_setting_default = "disable",
     values = [
         "disable",  # Don't include pfm at all
         "external",  # Build pfm from source

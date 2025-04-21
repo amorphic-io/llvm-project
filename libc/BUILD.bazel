@@ -30,7 +30,7 @@ licenses(["notice"])
 # Flag documentation: https://bazel.build/extending/config
 string_flag(
     name = "mpfr",
-    build_setting_default = "external",
+    build_setting_default = "disable",
     values = [
         "disable",  # Skip tests that need mpfr
         "external",  # Build mpfr from source
