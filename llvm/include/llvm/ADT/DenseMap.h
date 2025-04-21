@@ -912,7 +912,7 @@ class SmallDenseMap
 public:
   explicit SmallDenseMap(unsigned NumInitBuckets = 0) {
     if (NumInitBuckets > InlineBuckets)
-      NumInitBuckets = llvm::bit_ceil(NumInitBuckets);
+      NumInitBuckets = ::llvm::bit_ceil(NumInitBuckets);
     init(NumInitBuckets);
   }
 

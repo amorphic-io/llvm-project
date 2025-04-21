@@ -133,8 +133,8 @@ template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
 #elif defined(_MSC_VER) && !defined(_DEBUG)
     return _byteswap_uint64(UV);
 #else
-    uint64_t Hi = llvm::byteswap<uint32_t>(UV);
-    uint32_t Lo = llvm::byteswap<uint32_t>(UV >> 32);
+    uint64_t Hi = ::llvm::byteswap<uint32_t>(UV);
+    uint32_t Lo = ::llvm::byteswap<uint32_t>(UV >> 32);
     return (Hi << 32) | Lo;
 #endif
   } else {
@@ -216,7 +216,7 @@ template <typename T> struct TrailingZerosCounter<T, 8> {
 template <typename T> [[nodiscard]] int countr_zero(T Val) {
   static_assert(std::is_unsigned_v<T>,
                 "Only unsigned integral types are allowed.");
-  return llvm::detail::TrailingZerosCounter<T, sizeof(T)>::count(Val);
+  return ::llvm::detail::TrailingZerosCounter<T, sizeof(T)>::count(Val);
 }
 
 namespace detail {
@@ -282,7 +282,7 @@ template <typename T> struct LeadingZerosCounter<T, 8> {
 template <typename T> [[nodiscard]] int countl_zero(T Val) {
   static_assert(std::is_unsigned_v<T>,
                 "Only unsigned integral types are allowed.");
-  return llvm::detail::LeadingZerosCounter<T, sizeof(T)>::count(Val);
+  return ::llvm::detail::LeadingZerosCounter<T, sizeof(T)>::count(Val);
 }
 
 /// Count the number of ones from the most significant bit to the first
@@ -295,7 +295,7 @@ template <typename T> [[nodiscard]] int countl_zero(T Val) {
 template <typename T> [[nodiscard]] int countl_one(T Value) {
   static_assert(std::is_unsigned_v<T>,
                 "Only unsigned integral types are allowed.");
-  return llvm::countl_zero<T>(~Value);
+  return ::llvm::countl_zero<T>(~Value);
 }
 
 /// Count the number of ones from the least significant bit to the first
@@ -308,7 +308,7 @@ template <typename T> [[nodiscard]] int countl_one(T Value) {
 template <typename T> [[nodiscard]] int countr_one(T Value) {
   static_assert(std::is_unsigned_v<T>,
                 "Only unsigned integral types are allowed.");
-  return llvm::countr_zero<T>(~Value);
+  return ::llvm::countr_zero<T>(~Value);
 }
 
 /// Returns the number of bits needed to represent Value if Value is nonzero.
@@ -318,7 +318,7 @@ template <typename T> [[nodiscard]] int countr_one(T Value) {
 template <typename T> [[nodiscard]] int bit_width(T Value) {
   static_assert(std::is_unsigned_v<T>,
                 "Only unsigned integral types are allowed.");
-  return std::numeric_limits<T>::digits - llvm::countl_zero(Value);
+  return std::numeric_limits<T>::digits - ::llvm::countl_zero(Value);
 }
 
 /// Returns the largest integral power of two no greater than Value if Value is
@@ -345,7 +345,7 @@ template <typename T> [[nodiscard]] T bit_ceil(T Value) {
                 "Only unsigned integral types are allowed.");
   if (Value < 2)
     return 1;
-  return T(1) << llvm::bit_width<T>(Value - 1u);
+  return T(1) << ::llvm::bit_width<T>(Value - 1u);
 }
 
 namespace detail {
@@ -400,7 +400,7 @@ template <typename T, typename = std::enable_if_t<std::is_unsigned_v<T>>>
     return V;
 
   if (R < 0)
-    return llvm::rotr(V, -R);
+    return ::llvm::rotr(V, -R);
 
   return (V << R) | (V >> (N - R));
 }
@@ -413,7 +413,7 @@ template <typename T, typename> [[nodiscard]] constexpr T rotr(T V, int R) {
     return V;
 
   if (R < 0)
-    return llvm::rotl(V, -R);
+    return ::llvm::rotl(V, -R);
 
   return (V >> R) | (V << (N - R));
 }

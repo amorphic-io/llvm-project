@@ -176,7 +176,7 @@ protected:
       size_t SizeSoFar, size_t Count1,
       typename ExtractSecondType<MoreTys, size_t>::type... MoreCounts) {
     return ParentType::additionalSizeToAllocImpl(
-        (requiresRealignment() ? llvm::alignTo<alignof(NextTy)>(SizeSoFar)
+        (requiresRealignment() ? ::llvm::alignTo<alignof(NextTy)>(SizeSoFar)
                                : SizeSoFar) +
             sizeof(NextTy) * Count1,
         MoreCounts...);
