@@ -81,6 +81,7 @@ pythonenv*
 .bazelrc
 .bazelversion
 /bazel-*
+MODULE.bazel.lock
 
 #==============================================================================
 # Nix / direnv
