@@ -1,0 +1,18 @@
+"""https://llvm.org/"""
+
+module(
+    name = "llvm-project",
+    version = "20.1.8",
+)
+
+# Starlark depedndencies
+bazel_dep(name = "bazel_skylib", version = "1.8.1")
+
+# Library dependencies
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_cc", version = "0.1.2")
+bazel_dep(name = "rules_python", version = "1.5.1")
+bazel_dep(name = "rules_shell", version = "0.5.0")
+bazel_dep(name = "pybind11_bazel", version = "2.13.6")
+bazel_dep(name = "nanobind_bazel", version = "2.7.0")
+bazel_dep(name = "apple_support", version = "1.22.1")
