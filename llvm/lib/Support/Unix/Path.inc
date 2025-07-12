@@ -1435,7 +1435,7 @@ bool cache_directory(SmallVectorImpl<char> &result) {
 static const char *getEnvTempDir() {
   // Check whether the temporary directory is specified by an environment
   // variable.
-  const char *EnvironmentVariables[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR"};
+  const char *EnvironmentVariables[] = {"TEST_TMPDIR", "TMPDIR", "TMP", "TEMP", "TEMPDIR"};
   for (const char *Env : EnvironmentVariables) {
     if (const char *Dir = std::getenv(Env))
       return Dir;
